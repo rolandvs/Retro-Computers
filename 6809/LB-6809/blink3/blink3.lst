@@ -1,0 +1,36 @@
+                      ; blink3.asm
+                      ; Assembled with asm6809
+                      ; Land Boards, LLC
+                      ; Blinks an LED attached to PLD U2 on LB-6809-01 card
+                      
+C000                                  ORG $C000
+                      ; SET LED = LOW
+C000  4F              RESVEC  CLRA
+C001  B7E000                          STA     $E000
+                      ; WAIT LOOP
+C004  86FF                            LDA     #$FF
+C006                  LOOP1
+C006  C6FF                            LDB     #$FF
+C008                  LOOP1B
+C008  12                              NOP
+C009  5A                              DECB
+C00A  26FC                            BNE LOOP1B
+C00C  4A                              DECA
+C00D  26F7                            BNE     LOOP1
+                      ; SET LED = HIGH
+C00F  4F                              CLRA
+C010  B7C000                          STA     $C000
+                      ; WAIT LOOP
+C013  86FF                            LDA     #$FF
+C015                  LOOP2
+C015  C6FF                            LDB     #$FF
+C017                  LOOP2B
+C017  12                              NOP
+C018  5A                              DECB
+C019  26FC                            BNE LOOP2B
+C01B  4A                              DECA
+C01C  26F7                            BNE     LOOP2
+                      ; LOOP FOREVER
+C01E  20E0                            BRA     RESVEC
+FFFE                                  ORG     $FFFE
+FFFE  C000            LBFFE   FDB     RESVEC  ; RESET 
